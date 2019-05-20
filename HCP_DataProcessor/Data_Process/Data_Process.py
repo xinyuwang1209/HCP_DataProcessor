@@ -46,7 +46,7 @@ def filter_quality_test(data):
     data = data.loc[data['Subject'].isin(grmid[1])]
     return data
 
-def gen_X_y(data,use_4_features=False):
+def get_X_y(data,use_4_features=False):
     X = data.iloc[:,1:-1]
     y = data.iloc[:,-1]
     X = (X - X.mean()) / X.std()
