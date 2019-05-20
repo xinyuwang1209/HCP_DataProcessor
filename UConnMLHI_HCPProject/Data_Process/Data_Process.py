@@ -101,12 +101,29 @@ X = (X - X.mean()) / X.std()
 # X = X / X.max()
 
 X = data.iloc[:,1:-1]
-X.reset_index(drop=True,inplace=True)
 y = data.iloc[:,-1]
+
+# Use 71,72,73,74
+select_features_ids = [70,71,72,73]
+columns = []
+for i in range(X.shape[1]):
+    exists = False
+    for id in select_features_ids:
+        if id in X.columns[i]:
+            exists = True
+    if exists:
+        columns.append(X.columns[i])
+
+
+X = X[columns]
+
+
+X.reset_index(drop=True,inplace=True)
 y.reset_index(drop=True,inplace=True)
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification
+from sklearn.model_selection import cross_val_score
 
 # Cross validation
 pool = []
@@ -122,7 +139,7 @@ for i in range(n):
     y_train.reset_index(drop=True,inplace=True)
     X_test.reset_index(drop=True,inplace=True)
     y_test.reset_index(drop=True,inplace=True)
-    clf = RandomForestClassifier(n_estimators=100, max_depth=2,random_state=0).fit(X_train, y_test)
+    clf = RandomForestClassifier(n_estimators=100, max_depth=2,random_state=0).fit(X_train, y_train)
     # clf = svm.SVC(kernel='linear', C=1,degree=1,tol=0.001).fit(X_train, y_train)
     pool.append(clf)
     # if y_test[0] == 0:
@@ -140,6 +157,13 @@ for i in range(n):
 
 clf = pool[best_id]
 
+
+
+clf = RandomForestClassifier(n_estimators=100, max_depth=2,random_state=0)
+scores = cross_val_score(clf, X, y, cv=5)
+
+
+
 def feature_entry_locator(n):
     current = n
     n_column = 115
@@ -151,14 +175,23 @@ def feature_entry_locator(n):
     column = row + current + 1
     return row, column
 
-# Get best 100 entries
-features_index = [i[0] for i in sorted(enumerate(clf.coef_[0]), key=lambda x:x[1])][:10]
+# Get best 10 entries
+coef_ = abs(feat)
+features_index = [i[0] for i in sorted(enumerate(coef_), key=lambda x:x[1])][:10]
 best_10_features = data.iloc[:,[0]+[i+1 for i in features_index]]
-best_10_features.to_csv('/shared/healthinfolab/hcpdata/aal_corr_matrices/best_10_features.csv')
 
 
+# best_10_features.to_csv('/shared/healthinfolab/hcpdata/aal_corr_matrices/best_10_features.csv')
 
 
+feature_description = pd.read_excel('/shared/healthinfolab/hcpdata/aal_corr_matrices/aal_roi_list.xlsx')
+top_10_features_description = []
+for i in range(1,best_10_features.shape[1]):
+    a, b = best_10_features.columns[i]
+    a, b = a + 1, b + 1
+    top_10_features_description.append(set(feature_description.loc[feature_description['AAL_no.'].isin([a,b])]['ROI']))
+
+print(top_10_features_description)
 
 
 # use one session
