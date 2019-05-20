@@ -28,7 +28,7 @@ def update_addiction(data):
     return data
 
 # Update has genotype
-def update_has_genotype(data):
+def filter_has_genotype(data):
     path_file='/shared/healthinfolab/hcpdata/aal_corr_matrices/number_addiction/'
     geno = pd.read_csv(path_file + "psychiatric_data_HCP.csv")
     geno = geno.loc[geno["HasGT"]==True]
