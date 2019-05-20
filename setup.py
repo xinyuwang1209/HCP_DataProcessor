@@ -11,12 +11,12 @@ import sys
 
 try:
 	setup(
-		name='UConnMLHI_HCPProject',
-		version='0.0.4',
+		name='HCP_DataProcessor',
+		version='0.0.1',
 		author='Xinyu Wang',
 		author_email='xinyuwang1209@gmail.com',
-		description = ("UConnMLHI_HCPProject."),
-		url='https://github.com/xinyuwang1209/UConnMLHI_HCPProject.git',
+		description = ("HCP_DataProcessor."),
+		url='https://github.com/xinyuwang1209/HCP_DataProcessor.git',
 		platforms = 'any',
 		classifiers=[
 			'Environment :: Console',
@@ -27,12 +27,12 @@ try:
 			'Programming Language :: Python :: 3'
 		],
 		keywords=['Xinyu, xinyu, pypi, package, rpki'],
-		packages=find_packages(include=['UConnMLHI_HCPProject', 'UConnMLHI_HCPProject.*']),
-		# install_requires=[
-		# 	'numpy',
-		# 	'pandas',
-		# 	'pathos',
-		# ],
+		packages=find_packages(include=['HCP_DataProcessor', 'HCP_DataProcessor.*']),
+		install_requires=[
+			'numpy',
+			'pandas',
+			'pathos',
+		],
 
 		)
 finally:
