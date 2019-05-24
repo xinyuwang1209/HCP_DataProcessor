@@ -12,7 +12,7 @@ import sys
 try:
 	setup(
 		name='HCP_DataProcessor',
-		version='0.0.3',
+		version='0.0.4',
 		author='Xinyu Wang',
 		author_email='xinyuwang1209@gmail.com',
 		description = ("HCP_DataProcessor."),

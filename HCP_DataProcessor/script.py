@@ -14,15 +14,18 @@ import pandas as pd
 # # 0.54
 # feat = run_svm_cv(X,y,kernel='poly',C=0.5,cv=5,degree=10,coef0=100)
 # feat = run_svm_cv(X,y,kernel='poly',C=0.5,cv=5,degree=1)
+import HCP_DataProcessor.Data_Process as HCPDPP
 
-def get_data(path=None,use_4_features=False,pca_filter=0):
-    data = .DataProcess.correlation_matrix_collector()
-    data = .DataProcess.update_addiction(data)
-    data = .DataProcess.filter_has_genotype(data)
-    data = .DataProcess.filter_quality_test(data)
-    X,y = .DataProcess.get_X_y(data,use_4_features=use_4_features)
+
+def get_data(path=None,use_4_features=False,pca_filter=0,quality_filter=True):
+    data = HCPDPP.correlation_matrix_collector()
+    data = HCPDPP.update_addiction(data)
+    data = HCPDPP.filter_has_genotype(data)
+    if quality_filter:
+        data = HCPDPP.filter_quality_test(data)
+    X,y = HCPDPP.get_X_y(data,use_4_features=use_4_features)
     if pca_filter > 0:
-        X,a = .DataProcess.pca_filter(X,pca_filter)
+        X,a = HCPDPP.pca_filter(X,pca_filter)
         return X,y,a
     else:
         return X,y

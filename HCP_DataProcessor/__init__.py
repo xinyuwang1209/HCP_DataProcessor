@@ -1,2 +1,2 @@
-from .main import *
-from .script import *
+from HCP_DataProcessor import Data_Process
+from HCP_DataProcessor import script
