@@ -11,10 +11,18 @@ import math
 from ._correlation_matrix_collector import correlation_matrix_collector
 
 
-def addiction_reader(path_file='/shared/healthinfolab/hcpdata/aal_corr_matrices/number_addiction/'):
+def addiction_reader(path_file='/shared/healthinfolab/hcpdata/aal_corr_matrices/number_addiction/',Dp=True,Ab=True):
     df = pd.read_csv(path_file + "psychiatric_data_HCP.csv")
-    alcohol_addiction = df.loc[(df['SSAGA_Alc_D4_Ab_Sx']>=1)
-                              |(df['SSAGA_Alc_D4_Dp_Sx']>=1)]
+    if Dp and Ab:
+        alcohol_addiction = df.loc[(df['SSAGA_Alc_D4_Ab_Sx']>=1)
+                                  |(df['SSAGA_Alc_D4_Dp_Sx']>=1)]
+    elif Dp:
+        alcohol_addiction = df.loc[(df['SSAGA_Alc_D4_Dp_Sx']>=1)]
+    elif Ab:
+        alcohol_addiction = df.loc[(df['SSAGA_Alc_D4_Ab_Sx']>=1)]
+    else:
+        alcohol_addiction = df.loc[(df['SSAGA_Alc_D4_Ab_Sx']>=1)
+                                  &(df['SSAGA_Alc_D4_Dp_Sx']>=1)]
     return alcohol_addiction
 
 
@@ -22,9 +30,9 @@ def addiction_reader(path_file='/shared/healthinfolab/hcpdata/aal_corr_matrices/
 # data = correlation_matrix_collector()
 
 # Update addiction
-def update_addiction(data):
+def update_addiction(data,**args):
     data['addiction'] = 0
-    addiction = addiction_reader()
+    addiction = addiction_reader(**args)
     data.loc[data['Subject'].isin(addiction['Subject']),'addiction'] = 1
     return data
 
