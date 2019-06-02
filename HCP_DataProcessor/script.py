@@ -15,18 +15,18 @@
 import HCP_DataProcessor.Data_Process as HCPDPP
 
 
-def get_data(path=None,use_4_features=False,pca_filter=0,quality_filter=True,**args):
+def get_data(path=None,use_4_features=False,pca_filter=0,quality_filter=True,normalize=True,**args):
     data = HCPDPP.correlation_matrix_collector()
     data = HCPDPP.update_addiction(data,**args)
     data = HCPDPP.filter_has_genotype(data)
     if quality_filter:
         data = HCPDPP.filter_quality_test(data)
-    X,y = HCPDPP.get_X_y(data,use_4_features=use_4_features)
+    X,y = HCPDPP.get_X_y(data,use_4_features=use_4_features,normalize=normalize)
     if pca_filter > 0:
         X,a = HCPDPP.pca_filter(X,pca_filter)
         return X,y,a
     else:
-        return X,y
+        return data,X,y
 
 def calculate_vif_(X, thresh=5.0):
     variables = list(range(X.shape[1]))
@@ -45,7 +45,7 @@ def calculate_vif_(X, thresh=5.0):
     print(X.columns[variables])
     return X.iloc[:, variables]
 
-# 
+#
 # import HCP_DataProcessor.Data_Process as HCPDPP
 # import Prediction_Utils as PU
 # from sklearn.model_selection import train_test_split
