@@ -55,10 +55,11 @@ def filter_quality_test(data):
     data = data.loc[data['Subject'].isin(grmid[1])]
     return data
 
-def get_X_y(data,use_4_features=False):
+def get_X_y(data,use_4_features=False,normalize=True):
     X = data.iloc[:,1:-1]
     y = data.iloc[:,-1]
-    X = (X - X.mean()) / X.std()
+    if normalize:
+        X = (X - X.mean()) / X.std()
     # Use 71,72,73,74
     if use_4_features:
         select_features_ids = [70,71,72,73]
